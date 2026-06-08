@@ -1,0 +1,483 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+#app{display:flex;height:100vh;min-height:660px;font-family:var(--font-sans)}
+
+/* ── Sidebar ── */
+#sb{width:218px;background:#0C447C;display:flex;flex-direction:column;flex-shrink:0}
+#sb-logo{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.12)}
+#sb-logo .t1{font-size:13px;font-weight:500;color:#fff;line-height:1.3}
+#sb-logo .t2{font-size:11px;color:rgba(255,255,255,.55);margin-top:3px}
+nav{flex:1;overflow-y:auto;padding:10px 0}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 16px;font-size:12px;color:rgba(255,255,255,.65);cursor:pointer;border-left:3px solid transparent;transition:all .15s;line-height:1.3}
+.ni:hover{background:rgba(255,255,255,.08);color:#fff}
+.ni.active{color:#fff;border-left-color:#85B7EB;background:rgba(255,255,255,.12);font-weight:500}
+.ni i{font-size:15px;flex-shrink:0}
+.ni .chip{margin-left:auto;font-size:9px;background:rgba(255,255,255,.15);border-radius:10px;padding:2px 7px;color:rgba(255,255,255,.7)}
+.ni.active .chip{background:rgba(133,183,235,.3);color:#B5D4F4}
+#sb-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,.12)}
+#sb-footer p{font-size:10px;color:rgba(255,255,255,.4);line-height:1.5}
+
+/* ── Main ── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--color-background-tertiary)}
+
+/* ── Topbar ── */
+#tb{height:52px;background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;padding:0 22px;gap:12px;flex-shrink:0}
+#tb h1{font-size:14px;font-weight:500;flex:1;color:var(--color-text-primary)}
+.pill{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:500}
+.pill-blue{background:#E6F1FB;color:#0C447C}
+.pill-green{background:#EAF3DE;color:#27500A}
+
+/* ── Content ── */
+#ct{flex:1;overflow-y:auto;padding:18px 20px}
+.page{display:none}.page.active{display:block}
+
+/* ── Section title ── */
+.sec-title{font-size:10px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.sec-title::after{content:'';flex:1;height:0.5px;background:var(--color-border-tertiary)}
+
+/* ── KPI strip ── */
+.krow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.kpi{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 14px;border-top:3px solid}
+.kpi.ka{border-top-color:#185FA5}
+.kpi.kb{border-top-color:#E24B4A}
+.kpi.kc{border-top-color:#1D9E75}
+.kpi.kd{border-top-color:#EF9F27}
+.kpi .lbl{font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.kpi .val{font-size:20px;font-weight:500;color:var(--color-text-primary);line-height:1}
+.kpi .sub{font-size:10px;color:var(--color-text-secondary);margin-top:3px}
+
+/* ── Cards ── */
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px}
+.card-hd{font-size:10px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.card-hd i{font-size:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.mb{margin-bottom:12px}
+
+/* ── Efficiency bars ── */
+.bar-row{margin:6px 0}
+.bar-meta{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
+.bar-meta .bname{color:var(--color-text-primary)}
+.bar-meta .bval{color:var(--color-text-secondary)}
+.btrack{height:8px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+.bfill{height:100%;border-radius:4px}
+
+/* ── Tags ── */
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;margin:2px;font-weight:500}
+.tg{background:#EAF3DE;color:#27500A}
+.tr{background:#FCEBEB;color:#791F1F}
+.tb{background:#E6F1FB;color:#0C447C}
+.tw{background:#FAEEDA;color:#633806}
+.tp{background:#EEEDFE;color:#3C3489}
+
+/* ── Module hero ── */
+.hero{border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary);margin-bottom:12px}
+.hero-band{padding:16px 18px;display:flex;align-items:flex-start;gap:14px}
+.hero-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
+.hero-text h2{font-size:15px;font-weight:500;line-height:1.2;margin-bottom:4px}
+.hero-text p{font-size:11px;line-height:1.6;opacity:.8}
+.hero-tags{margin-top:6px}
+.hero-specs{display:grid;grid-template-columns:repeat(4,1fr);border-top:0.5px solid rgba(255,255,255,.15)}
+.spec-cell{padding:11px;text-align:center;border-right:0.5px solid rgba(255,255,255,.15)}
+.spec-cell:last-child{border-right:none}
+.spec-cell .sv{font-size:16px;font-weight:500}
+.spec-cell .sl{font-size:10px;opacity:.65;margin-top:2px}
+
+/* Hero color themes */
+.hero-mono .hero-band{background:#0C447C}
+.hero-mono .hero-band *{color:#fff!important}
+.hero-mono .hero-specs{background:#185FA5}
+.hero-mono .spec-cell *{color:#fff}
+.hero-mono .hero-icon{background:rgba(255,255,255,.15)}
+
+.hero-poli .hero-band{background:#633806}
+.hero-poli .hero-band *{color:#fff!important}
+.hero-poli .hero-specs{background:#854F0B}
+.hero-poli .spec-cell *{color:#fff}
+.hero-poli .hero-icon{background:rgba(255,255,255,.15)}
+
+.hero-thin .hero-band{background:#791F1F}
+.hero-thin .hero-band *{color:#fff!important}
+.hero-thin .hero-specs{background:#A32D2D}
+.hero-thin .spec-cell *{color:#fff}
+.hero-thin .hero-icon{background:rgba(255,255,255,.15)}
+
+.hero-shin .hero-band{background:#085041}
+.hero-shin .hero-band *{color:#fff!important}
+.hero-shin .hero-specs{background:#0F6E56}
+.hero-shin .spec-cell *{color:#fff}
+.hero-shin .hero-icon{background:rgba(255,255,255,.15)}
+
+.hero-half .hero-band{background:#3C3489}
+.hero-half .hero-band *{color:#fff!important}
+.hero-half .hero-specs{background:#534AB7}
+.hero-half .spec-cell *{color:#fff}
+.hero-half .hero-icon{background:rgba(255,255,255,.15)}
+
+/* ── Pro / Con lists ── */
+.pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pc-col h4{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:4px}
+.pc-col.pros h4{color:#27500A}
+.pc-col.cons h4{color:#791F1F}
+.pc-col ul{list-style:none}
+.pc-col ul li{font-size:11px;color:var(--color-text-secondary);padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.4;display:flex;align-items:flex-start;gap:5px}
+.pc-col ul li:last-child{border:none}
+.dot{width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px;margin-top:1px}
+.dot-g{background:#EAF3DE;color:#27500A}
+.dot-r{background:#FCEBEB;color:#791F1F}
+
+/* ── Comparison table ── */
+.ct{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+.ct th{padding:8px 10px;text-align:left;font-weight:500;font-size:10px;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary);text-transform:uppercase;letter-spacing:.3px}
+.ct td{padding:7px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:middle}
+.ct tr:last-child td{border:none}
+.ct .best{color:#27500A;font-weight:500}
+.ct .worst{color:#791F1F}
+.ct .mid{color:#633806}
+
+/* ── Eff pill ── */
+.ep{display:inline-block;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:500;color:#fff}
+
+/* ── Info box ── */
+.infobox{border-radius:var(--border-radius-md);padding:12px 14px;font-size:12px;line-height:1.7;border-left:3px solid}
+.infobox.blue{background:#E6F1FB;border-left-color:#185FA5;color:#0C447C}
+.infobox.green{background:#EAF3DE;border-left-color:#1D9E75;color:#27500A}
+.infobox.red{background:#FCEBEB;border-left-color:#E24B4A;color:#791F1F}
+.infobox.amber{background:#FAEEDA;border-left-color:#EF9F27;color:#633806}
+.infobox.purple{background:#EEEDFE;border-left-color:#7F77DD;color:#3C3489}
+
+/* ── Rank badges ── */
+.rank-strip{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.rank-card{flex:1;min-width:90px;border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden;background:var(--color-background-primary)}
+.rank-card .rc-top{padding:10px 10px 6px;display:flex;align-items:center;gap:6px}
+.rank-card .rc-num{font-size:18px;font-weight:500;width:28px;text-align:center}
+.rank-card .rc-name{font-size:11px;font-weight:500;color:var(--color-text-primary);line-height:1.2}
+.rank-card .rc-bar-wrap{height:4px;background:var(--color-background-secondary)}
+.rank-card .rc-bar{height:4px}
+.rank-card .rc-foot{padding:6px 10px 10px;font-size:10px;color:var(--color-text-secondary)}
+</style>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden">Dashboard interactivo de tipos de módulos fotovoltaicos: monocristalino, policristalino, capa fina, shingled y celda partida</h2>
+
+<div id="app">
+
+<!-- SIDEBAR -->
+<div id="sb">
+  <div id="sb-logo">
+    <div class="t1">Módulos fotovoltaicos</div>
+    <div class="t2">Taller de instalaciones de energia · T3_UI_MF</div>
+  </div>
+  <nav>
+    <div class="ni active" onclick="go('ov',this)"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Comparativa general<span class="chip">5 tipos</span></div>
+    <div class="ni" onclick="go('mo',this)"><i class="ti ti-sun" aria-hidden="true"></i>Monocristalino<span class="chip">#1</span></div>
+    <div class="ni" onclick="go('po',this)"><i class="ti ti-sun-off" aria-hidden="true"></i>Policristalino<span class="chip">#2</span></div>
+    <div class="ni" onclick="go('th',this)"><i class="ti ti-layers-subtract" aria-hidden="true"></i>Capa fina<span class="chip">#3</span></div>
+    <div class="ni" onclick="go('sh',this)"><i class="ti ti-stack" aria-hidden="true"></i>Shingled (teja)<span class="chip">#4</span></div>
+    <div class="ni" onclick="go('hc',this)"><i class="ti ti-cut" aria-hidden="true"></i>Celda partida<span class="chip">#5</span></div>
+  </nav>
+  <div id="sb-footer"><p>Fuentes: SunFields Europe · SotySolar · Energías Renovables · GYCX Solar · 2024–25</p></div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+<div id="tb">
+  <h1 id="ptitle">Comparativa general — 5 tecnologías fotovoltaicas</h1>
+  <span class="pill pill-blue"><i class="ti ti-school" aria-hidden="true"></i> Paneles fotovoltaicos</span>
+  <span class="pill pill-green">2026</span>
+</div>
+<div id="ct">
+
+<!-- OVERVIEW -->
+<div class="page active" id="page-ov">
+  <div class="krow">
+    <div class="kpi ka"><div class="lbl">Máx. eficiencia</div><div class="val">24%</div><div class="sub">Shingled premium</div></div>
+    <div class="kpi kb"><div class="lbl">Mín. eficiencia</div><div class="val">6%</div><div class="sub">Capa fina amorfa</div></div>
+    <div class="kpi kc"><div class="lbl">Mayor Wp/m²</div><div class="val">240+</div><div class="sub">Monocristalino/Shingled</div></div>
+    <div class="kpi kd"><div class="lbl">Menor costo</div><div class="val">Thin Film</div><div class="sub">&lt;150 USD/panel</div></div>
+  </div>
+
+  <div class="sec-title"><i class="ti ti-chart-bar" aria-hidden="true"></i>Ranking por eficiencia (mercado 2024–25)</div>
+  <div class="rank-strip mb">
+    <div class="rank-card"><div class="rc-top"><div class="rc-num" style="color:#0F6E56">1</div><div class="rc-name">Shingled</div></div><div class="rc-bar-wrap"><div class="rc-bar" style="width:95%;background:#0F6E56"></div></div><div class="rc-foot">22–24% · 200–240 Wp/m²</div></div>
+    <div class="rank-card"><div class="rc-top"><div class="rc-num" style="color:#185FA5">2</div><div class="rc-name">Monocristalino</div></div><div class="rc-bar-wrap"><div class="rc-bar" style="width:85%;background:#185FA5"></div></div><div class="rc-foot">20–23% · 180–240 Wp/m²</div></div>
+    <div class="rank-card"><div class="rc-top"><div class="rc-num" style="color:#534AB7">3</div><div class="rc-name">Celda partida</div></div><div class="rc-bar-wrap"><div class="rc-bar" style="width:80%;background:#534AB7"></div></div><div class="rc-foot">19–22% · 180–220 Wp/m²</div></div>
+    <div class="rank-card"><div class="rc-top"><div class="rc-num" style="color:#854F0B">4</div><div class="rc-name">Policristalino</div></div><div class="rc-bar-wrap"><div class="rc-bar" style="width:65%;background:#854F0B"></div></div><div class="rc-foot">16–18% · 150–180 Wp/m²</div></div>
+    <div class="rank-card"><div class="rc-top"><div class="rc-num" style="color:#A32D2D">5</div><div class="rc-name">Capa fina (a-Si)</div></div><div class="rc-bar-wrap"><div class="rc-bar" style="width:28%;background:#A32D2D"></div></div><div class="rc-foot">6–10% · 60–100 Wp/m²</div></div>
+  </div>
+
+  <div class="sec-title"><i class="ti ti-ruler-measure" aria-hidden="true"></i>Superficie necesaria para producir 1 kWp (menor es mejor)</div>
+  <div class="card mb">
+    <div class="bar-row"><div class="bar-meta"><span class="bname">Shingled</span><span class="bval">~4.2 m²</span></div><div class="btrack"><div class="bfill" style="width:22%;background:#0F6E56"></div></div></div>
+    <div class="bar-row"><div class="bar-meta"><span class="bname">Monocristalino PERC/TOPCon</span><span class="bval">~5 m²</span></div><div class="btrack"><div class="bfill" style="width:26%;background:#185FA5"></div></div></div>
+    <div class="bar-row"><div class="bar-meta"><span class="bname">Celda partida (half-cell)</span><span class="bval">~5.5 m²</span></div><div class="btrack"><div class="bfill" style="width:29%;background:#534AB7"></div></div></div>
+    <div class="bar-row"><div class="bar-meta"><span class="bname">Policristalino</span><span class="bval">~6.5 m²</span></div><div class="btrack"><div class="bfill" style="width:34%;background:#854F0B"></div></div></div>
+    <div class="bar-row"><div class="bar-meta"><span class="bname">Capa fina CdTe</span><span class="bval">~8 m²</span></div><div class="btrack"><div class="bfill" style="width:42%;background:#BA7517"></div></div></div>
+    <div class="bar-row"><div class="bar-meta"><span class="bname">Capa fina amorfa (a-Si)</span><span class="bval">11–13 m²</span></div><div class="btrack"><div class="bfill" style="width:66%;background:#A32D2D"></div></div></div>
+  </div>
+
+  <div class="sec-title"><i class="ti ti-table" aria-hidden="true"></i>Tabla comparativa</div>
+  <div class="card mb">
+    <div style="overflow-x:auto">
+    <table class="ct">
+      <thead><tr><th style="width:22%">Tecnología</th><th style="width:13%">Eficiencia</th><th style="width:11%">Wp/m²</th><th style="width:12%">Vida útil</th><th style="width:13%">Costo relativo</th><th style="width:10%">Sombras</th><th>Mejor uso</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Monocristalino</strong></td><td><span class="ep" style="background:#185FA5">20–23%</span></td><td class="best">180–240</td><td class="best">25–30 a</td><td class="worst">Alto</td><td class="mid">Medio</td><td style="font-size:10px">Off Grid residencial, tejados pequeños</td></tr>
+        <tr><td><strong>Policristalino</strong></td><td><span class="ep" style="background:#854F0B">16–18%</span></td><td class="mid">150–180</td><td class="mid">20–25 a</td><td class="best">Bajo</td><td class="mid">Medio</td><td style="font-size:10px">Grandes superficies, presupuesto ajustado</td></tr>
+        <tr><td><strong>Capa fina (a-Si)</strong></td><td><span class="ep" style="background:#A32D2D">6–10%</span></td><td class="worst">60–100</td><td class="worst">10–20 a</td><td class="best">Muy bajo</td><td class="best">Bueno</td><td style="font-size:10px">Fachadas, portátiles, integración arquitectónica</td></tr>
+        <tr><td><strong>Shingled (teja)</strong></td><td><span class="ep" style="background:#0F6E56">22–24%</span></td><td class="best">200–240+</td><td class="best">25–30 a</td><td class="worst">Muy alto</td><td class="best">Excelente</td><td style="font-size:10px">Espacio muy limitado, estética premium</td></tr>
+        <tr><td><strong>Celda partida</strong></td><td><span class="ep" style="background:#534AB7">19–22%</span></td><td class="best">180–220</td><td class="best">25–30 a</td><td class="mid">Medio-alto</td><td class="best">Muy bueno</td><td style="font-size:10px">Tejados parcialmente sombreados</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="sec-title"><i class="ti ti-home" aria-hidden="true"></i>Recomendación para Off Grid</div>
+  <div class="grid3">
+    <div class="infobox blue"><strong>1° Monocristalino PERC/TOPCon</strong><br>Mejor relación eficiencia/precio. Estándar del mercado Off Grid residencial 2024–25.</div>
+    <div class="infobox purple"><strong>2° Celda partida (half-cell)</strong><br>Si hay sombras parciales, la pérdida baja de 1/3 a solo 1/6. Compatible con PERC y TOPCon.</div>
+    <div class="infobox green"><strong>3° Shingled (presupuesto alto)</strong><br>Mayor eficiencia disponible. Sin soldadura metálica. Ideal cuando el espacio es crítico.</div>
+  </div>
+</div>
+
+<!-- MONOCRISTALINO -->
+<div class="page" id="page-mo">
+  <div class="hero hero-mono">
+    <div class="hero-band">
+      <div class="hero-icon"><i class="ti ti-sun" aria-hidden="true"></i></div>
+      <div class="hero-text">
+        <h2>Módulo monocristalino</h2>
+        <p>Cristal único de silicio puro (lingote cilíndrico cortado en obleas). Tecnologías: PERC · TOPCon · HJT · IBC. Color negro oscuro uniforme. Estándar actual del mercado Off Grid.</p>
+        <div class="hero-tags"><span class="tag tb">PERC</span><span class="tag tb">TOPCon</span><span class="tag tb">HJT</span><span class="tag tb">IBC</span><span class="tag tg">Bifacial</span></div>
+      </div>
+    </div>
+    <div class="hero-specs">
+      <div class="spec-cell"><div class="sv">20–23%</div><div class="sl">Eficiencia</div></div>
+      <div class="spec-cell"><div class="sv">180–240</div><div class="sl">Wp/m²</div></div>
+      <div class="spec-cell"><div class="sv">~5 m²</div><div class="sl">para 1 kWp</div></div>
+      <div class="spec-cell"><div class="sv">25–30 a</div><div class="sl">Vida útil</div></div>
+    </div>
+  </div>
+  <div class="grid2 mb">
+    <div class="card">
+      <div class="card-hd" style="color:#27500A"><i class="ti ti-circle-check" aria-hidden="true"></i>Ventajas</div>
+      <div class="pc-col pros"><ul>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Mayor eficiencia del mercado (hasta 23% comercial)</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Degradación anual mínima: 0.3–0.5%</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Mejor rendimiento en baja luminosidad</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Ideal para techos de superficie limitada</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Garantía típica: 25 años producto + rendimiento</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Compatible con MPPT de alta tensión de entrada</li>
+      </ul></div>
+    </div>
+    <div class="card">
+      <div class="card-hd" style="color:#791F1F"><i class="ti ti-circle-x" aria-hidden="true"></i>Desventajas</div>
+      <div class="pc-col cons"><ul>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Mayor costo inicial vs policristalino</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Fabricación genera residuos de silicio en el corte</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Pérdida de eficiencia notable a altas temperaturas (~0.35%/°C)</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Sensible a sombras parciales en celda completa</li>
+      </ul></div>
+    </div>
+  </div>
+  <div class="grid3">
+    <div class="infobox blue"><strong>Material base:</strong> Silicio tipo N (TOPCon/HJT) lidera 2024–25 por menor degradación inducida por la luz (LID).</div>
+    <div class="infobox amber"><strong>Coeficiente térmico:</strong> −0.35%/°C sobre 25°C. Módulo a 65°C en verano = pierde ~14% de la potencia nominal STC.</div>
+    <div class="infobox green"><strong>Fabricantes líderes:</strong> JinkoSolar, LONGi, JA Solar. Premium: REC Group, SunPower, FuturaSun.</div>
+  </div>
+</div>
+
+<!-- POLICRISTALINO -->
+<div class="page" id="page-po">
+  <div class="hero hero-poli">
+    <div class="hero-band">
+      <div class="hero-icon"><i class="ti ti-sun-off" aria-hidden="true"></i></div>
+      <div class="hero-text">
+        <h2>Módulo policristalino</h2>
+        <p>Múltiples cristales de silicio fundidos y vertidos en molde. Color azul moteado con células cuadradas. Tecnología madura con cuota de mercado en descenso desde 2017.</p>
+        <div class="hero-tags"><span class="tag tw">Económico</span><span class="tag tw">Silicio fundido</span><span class="tag tw">Célula cuadrada</span></div>
+      </div>
+    </div>
+    <div class="hero-specs">
+      <div class="spec-cell"><div class="sv">16–18%</div><div class="sl">Eficiencia</div></div>
+      <div class="spec-cell"><div class="sv">150–180</div><div class="sl">Wp/m²</div></div>
+      <div class="spec-cell"><div class="sv">~6.5 m²</div><div class="sl">para 1 kWp</div></div>
+      <div class="spec-cell"><div class="sv">20–25 a</div><div class="sl">Vida útil</div></div>
+    </div>
+  </div>
+  <div class="grid2 mb">
+    <div class="card">
+      <div class="card-hd" style="color:#27500A"><i class="ti ti-circle-check" aria-hidden="true"></i>Ventajas</div>
+      <div class="pc-col pros"><ul>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Menor costo inicial: el más accesible del mercado cristalino</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Proceso de fabricación más sencillo y menos residuos</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Absorbe menos calor (color azul más claro)</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Amplia disponibilidad y facilidad de reposición</li>
+      </ul></div>
+    </div>
+    <div class="card">
+      <div class="card-hd" style="color:#791F1F"><i class="ti ti-circle-x" aria-hidden="true"></i>Desventajas</div>
+      <div class="pc-col cons"><ul>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Menor eficiencia: necesita más superficie para igual potencia</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Mayor degradación anual que el monocristalino</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Menor rendimiento con baja luminosidad</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>En desuso para Off Grid nuevo: mono supera costo-eficiencia</li>
+      </ul></div>
+    </div>
+  </div>
+  <div class="infobox amber">Los policristalinos dominaron el mercado hasta ~2017. Hoy su comercialización residencial es mínima. Siguen siendo válidos en proyectos con gran superficie y presupuesto muy ajustado, como bombeo agrícola o telecomunicaciones rurales de bajo consumo.</div>
+</div>
+
+<!-- CAPA FINA -->
+<div class="page" id="page-th">
+  <div class="hero hero-thin">
+    <div class="hero-band">
+      <div class="hero-icon"><i class="ti ti-layers-subtract" aria-hidden="true"></i></div>
+      <div class="hero-text">
+        <h2>Capa fina / Thin Film</h2>
+        <p>Capas delgadas de material fotovoltaico sobre sustrato (vidrio, plástico o metal). Sin estructura cristalina. Tres variantes: silicio amorfo (a-Si), teluro de cadmio (CdTe) y CIGS.</p>
+        <div class="hero-tags"><span class="tag tr">a-Si 6–10%</span><span class="tag tw">CdTe ~19%</span><span class="tag tb">CIGS ~22%</span><span class="tag tg">Flexible</span></div>
+      </div>
+    </div>
+    <div class="hero-specs">
+      <div class="spec-cell"><div class="sv">6–10%</div><div class="sl">Efic. a-Si</div></div>
+      <div class="spec-cell"><div class="sv">60–100</div><div class="sl">Wp/m² (a-Si)</div></div>
+      <div class="spec-cell"><div class="sv">11–13 m²</div><div class="sl">para 1 kWp</div></div>
+      <div class="spec-cell"><div class="sv">10–20 a</div><div class="sl">Vida útil</div></div>
+    </div>
+  </div>
+  <div class="grid2 mb">
+    <div class="card">
+      <div class="card-hd" style="color:#27500A"><i class="ti ti-circle-check" aria-hidden="true"></i>Ventajas</div>
+      <div class="pc-col pros"><ul>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Mejor comportamiento a altas temperaturas y luz difusa</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Pueden ser flexibles y ligeros (sustrato plástico)</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Precio muy bajo (&lt;150 USD/panel en a-Si)</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Versatilidad: fachadas, techos curvos, portátiles</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Buen rendimiento en días nublados y luz difusa</li>
+      </ul></div>
+    </div>
+    <div class="card">
+      <div class="card-hd" style="color:#791F1F"><i class="ti ti-circle-x" aria-hidden="true"></i>Desventajas</div>
+      <div class="pc-col cons"><ul>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Eficiencia muy baja en a-Si (6–10%): gran superficie requerida</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Alta degradación inicial (efecto Staebler-Wronski en a-Si)</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Vida útil más corta (10–20 años)</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>CdTe contiene cadmio: material tóxico con restricciones UE</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>No recomendados para Off Grid residencial estándar</li>
+      </ul></div>
+    </div>
+  </div>
+  <div class="sec-title"><i class="ti ti-layers" aria-hidden="true"></i>Comparativa entre variantes de capa fina</div>
+  <div class="card">
+    <table class="ct">
+      <thead><tr><th>Variante</th><th>Material</th><th>Eficiencia</th><th>Wp/m²</th><th>Característica principal</th></tr></thead>
+      <tbody>
+        <tr><td><strong>a-Si</strong></td><td>Silicio amorfo</td><td class="worst">6–10%</td><td class="worst">60–100</td><td>Más flexible, mayor degradación inicial</td></tr>
+        <tr><td><strong>CdTe</strong></td><td>Teluro de cadmio</td><td class="mid">~19%</td><td class="mid">150–180</td><td>Bajo costo, toxicidad del cadmio</td></tr>
+        <tr><td><strong>CIGS</strong></td><td>Cu-In-Ga-Se</td><td class="best">~22%</td><td class="best">180–210</td><td>Máxima eficiencia thin film</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SHINGLED -->
+<div class="page" id="page-sh">
+  <div class="hero hero-shin">
+    <div class="hero-band">
+      <div class="hero-icon"><i class="ti ti-stack" aria-hidden="true"></i></div>
+      <div class="hero-text">
+        <h2>Shingled — celda de teja</h2>
+        <p>Células cortadas en tiras y superpuestas como tejas, unidas con adhesivo conductor (ECA) sin soldadura metálica. Sin gap visible entre células. Patente original: SunPower. Máxima densidad de potencia disponible.</p>
+        <div class="hero-tags"><span class="tag tg">Sin soldadura</span><span class="tag tg">ECA adhesivo</span><span class="tag tg">Mayor densidad</span><span class="tag tg">Premium</span></div>
+      </div>
+    </div>
+    <div class="hero-specs">
+      <div class="spec-cell"><div class="sv">22–24%</div><div class="sl">Eficiencia</div></div>
+      <div class="spec-cell"><div class="sv">200–240+</div><div class="sl">Wp/m²</div></div>
+      <div class="spec-cell"><div class="sv">~4.2 m²</div><div class="sl">para 1 kWp</div></div>
+      <div class="spec-cell"><div class="sv">25–30 a</div><div class="sl">Vida útil</div></div>
+    </div>
+  </div>
+  <div class="grid2 mb">
+    <div class="card">
+      <div class="card-hd" style="color:#27500A"><i class="ti ti-circle-check" aria-hidden="true"></i>Ventajas</div>
+      <div class="pc-col pros"><ul>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Eficiencia más alta del mercado comercial (22–24%)</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Sin conexiones metálicas soldadas: elimina modo de fallo típico</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Vías redundantes de corriente: tolera micro-grietas</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Excelente tolerancia a sombras parciales</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Estética uniforme: aspecto negro sin espacios visibles</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Menor calentamiento de células → mejor rendimiento real</li>
+      </ul></div>
+    </div>
+    <div class="card">
+      <div class="card-hd" style="color:#791F1F"><i class="ti ti-circle-x" aria-hidden="true"></i>Desventajas</div>
+      <div class="pc-col cons"><ul>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Costo muy alto: tecnología premium</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Fabricación compleja: corte láser y adhesivo ECA especializado</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Menor disponibilidad de proveedores vs mono estándar</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Reparación más difícil si el ECA falla a largo plazo</li>
+      </ul></div>
+    </div>
+  </div>
+  <div class="infobox green">Las células se cortan con láser en 5–6 tiras rectangulares superpuestas con <strong>ECA (Electrically Conductive Adhesive)</strong>. Se elimina el espacio entre células, maximizando el área activa. Sin soldadura se reduce la resistencia interna y el calentamiento, mejorando el rendimiento global hasta un 8–10% respecto a módulos monocristalinos estándar de la misma área.</div>
+</div>
+
+<!-- CELDA PARTIDA -->
+<div class="page" id="page-hc">
+  <div class="hero hero-half">
+    <div class="hero-band">
+      <div class="hero-icon"><i class="ti ti-cut" aria-hidden="true"></i></div>
+      <div class="hero-text">
+        <h2>Celda partida — half-cell</h2>
+        <p>Cada célula solar estándar se corta por la mitad con láser. Un módulo de 72 células completas pasa a 144 medias células. La corriente se reduce a la mitad, disminuyendo pérdidas resistivas y mejorando tolerancia a sombras.</p>
+        <div class="hero-tags"><span class="tag tp">Half-cut laser</span><span class="tag tp">144 celdas</span><span class="tag tg">Estándar 2024</span><span class="tag tb">Compatible PERC/TOPCon</span></div>
+      </div>
+    </div>
+    <div class="hero-specs">
+      <div class="spec-cell"><div class="sv">19–22%</div><div class="sl">Eficiencia</div></div>
+      <div class="spec-cell"><div class="sv">180–220</div><div class="sl">Wp/m²</div></div>
+      <div class="spec-cell"><div class="sv">~5.5 m²</div><div class="sl">para 1 kWp</div></div>
+      <div class="spec-cell"><div class="sv">25–30 a</div><div class="sl">Vida útil</div></div>
+    </div>
+  </div>
+  <div class="grid2 mb">
+    <div class="card">
+      <div class="card-hd" style="color:#27500A"><i class="ti ti-circle-check" aria-hidden="true"></i>Ventajas</div>
+      <div class="pc-col pros"><ul>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Sombra afecta solo 1/6 de la producción (vs 1/3 en celda completa)</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Corriente reducida a la mitad → menores pérdidas resistivas</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Menor estrés mecánico → menos riesgo de micro-grietas</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Mejor rendimiento en baja luminosidad</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Compatible con PERC, TOPCon y HJT</li>
+        <li><span class="dot dot-g"><i class="ti ti-check" style="font-size:8px" aria-hidden="true"></i></span>Mayor potencia de salida vs mismo módulo en celda completa</li>
+      </ul></div>
+    </div>
+    <div class="card">
+      <div class="card-hd" style="color:#791F1F"><i class="ti ti-circle-x" aria-hidden="true"></i>Desventajas</div>
+      <div class="pc-col cons"><ul>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Precio levemente superior al módulo de celda completa equivalente</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>Mayor cantidad de celdas complica inspección EL (electroluminiscencia)</li>
+        <li><span class="dot dot-r"><i class="ti ti-x" style="font-size:8px" aria-hidden="true"></i></span>La ventaja sobre shingled se reduce en paneles de alta gama</li>
+      </ul></div>
+    </div>
+  </div>
+  <div class="infobox purple">Un módulo de celda completa tiene <strong>3 strings de 24 células</strong>: una sombra en 1 string = <strong style="color:#791F1F">pierde 1/3 del módulo</strong>. El half-cell tiene <strong>6 strings de 24 medias células</strong>: la misma sombra afecta 1 de 6 strings = <strong style="color:#27500A">pierde solo 1/6</strong>. Es hoy el estándar de la industria por su excelente relación costo-beneficio.</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+const titles={ov:'Comparativa general — 5 tecnologías fotovoltaicas',mo:'Módulo monocristalino — silicio cristalino puro',po:'Módulo policristalino — silicio multifusión',th:'Capa fina (thin film) — amorfo, CdTe y CIGS',sh:'Shingled — celda de teja superpuesta con ECA',hc:'Celda partida — half-cell technology'};
+function go(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('ptitle').textContent=titles[id];
+  document.getElementById('ct').scrollTop=0;
+}
+</script>
